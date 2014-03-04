@@ -450,20 +450,28 @@ public class ActivityManager {
     }
 
     /**
-     * Used by persistent processes to determine if they are running on a
-     * higher-end device so should be okay using hardware drawing acceleration
-     * (which tends to consume a lot more RAM).
-     * @hide
-     */
+* Used by persistent processes to determine if they are running on a
+* higher-end device so should be okay using hardware drawing acceleration
+* (which tends to consume a lot more RAM).
+* @hide
+*/
     static public boolean isHighEndGfx() {
-        return !isLowRamDeviceStatic() &&
-                !Resources.getSystem().getBoolean(com.android.internal.R.bool.config_avoidGfxAccel);
+        return (!isLowRamDeviceStatic() &&
+                !Resources.getSystem().getBoolean(com.android.internal.R.bool.config_avoidGfxAccel))
+                || isForcedHighEndGfx();
     }
 
     /**
-     * Information you can retrieve about tasks that the user has most recently
-     * started or visited.
-     */
+* @hide
+*/
+    public static boolean isForcedHighEndGfx() {
+        return SystemProperties.getBoolean("persist.sys.force_highendgfx", false);
+    }
+
+    /**
+* Information you can retrieve about tasks that the user has most recently
+* started or visited.
+*/
     public static class RecentTaskInfo implements Parcelable {
         /**
          * If this task is currently running, this is the identifier for it.
